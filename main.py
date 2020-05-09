@@ -36,12 +36,15 @@ while True:
         if event.type == pg.MOUSEBUTTONDOWN:
             # Set the x, y postions of the mouse click
             x, y = event.pos
-            if ng.get_rect().collidepoint(x, y) and count == 0:
+            newgame=ng.get_rect()
+            newgame[0]=int(dis.current_w*6/8)
+            newgame[1]=int(dis.current_h/50)
+            if newgame.collidepoint(x, y) and count == 0:
                 print("hej")
     if pg.mouse.get_pressed()[2]:
         if count == 0:
             sys.exit(0)
-        count-=1
+        count = 0
         ng = pg.image.load(os.path.join("images_title2", "new_game.png")).convert_alpha()
         ng = pg.transform.scale(ng, (int(dis.current_w/8), int(dis.current_h/5)))
         lg = pg.image.load(os.path.join("images_title2", "load_game.png")).convert_alpha()
@@ -53,7 +56,7 @@ while True:
         q = pg.image.load(os.path.join("images_title2", "quit.png")).convert_alpha()
         q = pg.transform.scale(q, (int(dis.current_w/8), int(dis.current_h/5)))
     if pg.mouse.get_pressed()[0]:
-        count += 1
+        count = 1
         ng = pg.image.load(os.path.join("images_title2", "single_player.png")).convert_alpha()
         ng = pg.transform.scale(ng, (int(dis.current_w/8), int(dis.current_h/5)))
         lg = pg.image.load(os.path.join("images_title2", "multi_player.png")).convert_alpha()
