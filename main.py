@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import os
+from fight import Fight
 pg.init()
 screen=pg.display.set_mode((pg.display.Info().current_w,pg.display.Info().current_h),pg.FULLSCREEN)
 dis=pg.display.Info()
@@ -36,6 +37,7 @@ def disp(b,n,l,h,a,q,g,count):
     pg.display.update()
 load("background.png","new_game.png","load_game.png","highscore.png","authors.png","quit.png","new_game_bg.png")
 count = 0
+type=""
 while True:
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -48,15 +50,20 @@ while True:
             newgame[1]=int(dis.current_h/50)
             if newgame.collidepoint(x, y) and count == 0:
                 load("background.png","single_player.png","multi_player.png","campaign.png","training.png","back.png","new_game_bg.png")
-                disp(bg, ng, lg, h, a, q, nbg, count)
+                type="new"
                 count=1
-            back=q.get_rect()
-            back[0]=int(dis.current_w*6/8)
-            back[1]=int(dis.current_h*40/50)
-            if back.collidepoint(x,y) and count == 1:
+            elif newgame.collidepoint(x, y) and count == 1:
+                if type=="new":
+                    Fight()
+            newgame[1] = int(dis.current_h * 10 / 50)
+            if newgame.collidepoint(x,y) and count == 0:
+                load("background.png", "single_player.png", "multi_player.png", "campaign.png", "training.png", "back.png", "new_game_bg.png")
+                type="load"
+                count=1
+            newgame[1]=int(dis.current_h*40/50)
+            if newgame.collidepoint(x,y) and count == 1:
                 load("background.png", "new_game.png", "load_game.png", "highscore.png", "authors.png", "quit.png","new_game_bg.png")
-                disp(bg, ng, lg, h, a, q, nbg, count)
                 count=0
-            elif back.collidepoint(x, y) and count == 0:
+            elif newgame.collidepoint(x, y) and count == 0:
                 sys.exit(0)
     disp(bg, ng, lg, h, a, q, nbg, count)
