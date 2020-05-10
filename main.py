@@ -12,12 +12,10 @@ a=pg.image.load(os.path.join("images_title2", "authors.png")).convert_alpha()
 q=pg.image.load(os.path.join("images_title2", "quit.png")).convert_alpha()
 nbg=pg.image.load(os.path.join("images_title2", "new_game_bg.png")).convert_alpha()
 def load(name1,name2,name3,name4,name5,name6,name7):
-    bg = pg.image.load(os.path.join("images_title2", name1)).convert()
-    bg = pg.transform.scale(bg, (dis.current_w, dis.current_h))
-    ng = pg.image.load(os.path.join("images_title2", name2)).convert_alpha()
-    ng = pg.transform.scale(ng, (int(dis.current_w/8), int(dis.current_h/5)))
-    lg = pg.image.load(os.path.join("images_title2", name3)).convert_alpha()
-    lg = pg.transform.scale(lg, (int(dis.current_w/8), int(dis.current_h/5)))
+    global bg,ng,lg,h,a,q,nbg
+    bg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name1)).convert(), (dis.current_w, dis.current_h))
+    ng = pg.transform.scale(pg.image.load(os.path.join("images_title2", name2)).convert_alpha(), (int(dis.current_w/8), int(dis.current_h/5)))
+    lg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name3)).convert_alpha(), (int(dis.current_w/8), int(dis.current_h/5)))
     h = pg.image.load(os.path.join("images_title2", name4)).convert_alpha()
     h = pg.transform.scale(h, (int(dis.current_w/8), int(dis.current_h/5)))
     a = pg.image.load(os.path.join("images_title2", name5)).convert_alpha()
@@ -49,7 +47,7 @@ while True:
             newgame[0]=int(dis.current_w*6/8)
             newgame[1]=int(dis.current_h/50)
             if newgame.collidepoint(x, y) and count == 0:
-                load("background.png","single_player.png","multi_player.png","campaign.png","training.png","back.png","new_game.png")
+                load("background.png","single_player.png","multi_player.png","campaign.png","training.png","back.png","new_game_bg.png")
                 disp(bg, ng, lg, h, a, q, nbg, count)
                 count=1
             back=q.get_rect()
@@ -59,33 +57,6 @@ while True:
                 load("background.png", "new_game.png", "load_game.png", "highscore.png", "authors.png", "quit.png","new_game_bg.png")
                 disp(bg, ng, lg, h, a, q, nbg, count)
                 count=0
-                print("second")
-            if back.collidepoint(x, y) and count == 0:
+            elif back.collidepoint(x, y) and count == 0:
                 sys.exit(0)
-    #if pg.mouse.get_pressed()[2]:
-     #   if count == 0:
-      #      sys.exit(0)
-     #   count = 0
-     #   ng = pg.image.load(os.path.join("images_title2", "new_game.png")).convert_alpha()
-     #  ng = pg.transform.scale(ng, (int(dis.current_w/8), int(dis.current_h/5)))
-     #   lg = pg.image.load(os.path.join("images_title2", "load_game.png")).convert_alpha()
-     #   lg = pg.transform.scale(lg, (int(dis.current_w/8), int(dis.current_h/5)))
-     #   h = pg.image.load(os.path.join("images_title2", "highscore.png")).convert_alpha()
-     #   h = pg.transform.scale(h, (int(dis.current_w/8), int(dis.current_h/5)))
-     #   a = pg.image.load(os.path.join("images_title2", "authors.png")).convert_alpha()
-     #   a = pg.transform.scale(a, (int(dis.current_w/8), int(dis.current_h/5)))
-     #   q = pg.image.load(os.path.join("images_title2", "quit.png")).convert_alpha()
-     #   q = pg.transform.scale(q, (int(dis.current_w/8), int(dis.current_h/5)))
-    #if pg.mouse.get_pressed()[0]:
-      #  count = 1
-      #  ng = pg.image.load(os.path.join("images_title2", "single_player.png")).convert_alpha()
-      #  ng = pg.transform.scale(ng, (int(dis.current_w/8), int(dis.current_h/5)))
-      #  lg = pg.image.load(os.path.join("images_title2", "multi_player.png")).convert_alpha()
-      #  lg = pg.transform.scale(lg, (int(dis.current_w/8), int(dis.current_h/5)))
-      #  h = pg.image.load(os.path.join("images_title2", "campaign.png")).convert_alpha()
-      #  h = pg.transform.scale(h, (int(dis.current_w/8), int(dis.current_h/5)))
-      #  a = pg.image.load(os.path.join("images_title2", "training.png")).convert_alpha()
-      #  a = pg.transform.scale(a, (int(dis.current_w/8), int(dis.current_h/5)))
-      #  q = pg.image.load(os.path.join("images_title2", "back.png")).convert_alpha()
-      #  q = pg.transform.scale(q, (int(dis.current_w/8), int(dis.current_h/5)))
     disp(bg, ng, lg, h, a, q, nbg, count)
