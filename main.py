@@ -15,24 +15,20 @@ nbg=pg.image.load(os.path.join("images_title2", "new_game_bg.png")).convert_alph
 def load(name1,name2,name3,name4,name5,name6,name7):
     global bg,ng,lg,h,a,q,nbg
     bg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name1)).convert(), (dis.current_w, dis.current_h))
-    ng = pg.transform.scale(pg.image.load(os.path.join("images_title2", name2)).convert_alpha(), (int(dis.current_w/8), int(dis.current_h/5)))
-    lg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name3)).convert_alpha(), (int(dis.current_w/8), int(dis.current_h/5)))
-    h = pg.image.load(os.path.join("images_title2", name4)).convert_alpha()
-    h = pg.transform.scale(h, (int(dis.current_w/8), int(dis.current_h/5)))
-    a = pg.image.load(os.path.join("images_title2", name5)).convert_alpha()
-    a = pg.transform.scale(a, (int(dis.current_w/8), int(dis.current_h/5)))
-    q = pg.image.load(os.path.join("images_title2", name6)).convert_alpha()
-    q = pg.transform.scale(q, (int(dis.current_w/8), int(dis.current_h/5)))
-    nbg = pg.image.load(os.path.join("images_title2", name7)).convert_alpha()
-    nbg = pg.transform.scale(nbg, (dis.current_w, dis.current_h))
-def disp(b,n,l,h,a,q,g,count):
+    ng = pg.transform.scale(pg.image.load(os.path.join("images_title2", name2)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
+    lg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name3)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
+    h = pg.transform.scale(pg.image.load(os.path.join("images_title2", name4)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
+    a = pg.transform.scale(pg.image.load(os.path.join("images_title2", name5)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
+    q = pg.transform.scale(pg.image.load(os.path.join("images_title2", name6)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
+    nbg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name7)).convert_alpha(), (dis.current_w, dis.current_h))
+def disp(b,n,l,h,a,q,g,count,type):
     screen.blit(b, (0, 0))
     screen.blit(n, (int(dis.current_w*6/8), int(dis.current_h/50)))
     screen.blit(l, (int(dis.current_w*6/8), int(dis.current_h*10/50)))
     screen.blit(h, (int(dis.current_w*6/8), int(dis.current_h*20/50)))
     screen.blit(a, (int(dis.current_w*6/8), int(dis.current_h*30/50)))
     screen.blit(q, (int(dis.current_w*6/8), int(dis.current_h*40/50)))
-    if count ==1:
+    if count ==1 and type=="new":
         screen.blit(g, (0,0))
     pg.display.update()
 load("background.png","new_game.png","load_game.png","highscore.png","authors.png","quit.png","new_game_bg.png")
@@ -66,4 +62,4 @@ while True:
                 count=0
             elif newgame.collidepoint(x, y) and count == 0:
                 sys.exit(0)
-    disp(bg, ng, lg, h, a, q, nbg, count)
+    disp(bg, ng, lg, h, a, q, nbg, count,type)
