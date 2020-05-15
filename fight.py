@@ -24,7 +24,7 @@ class Fight(object):
             screen.blit(bg, (0, 0))
             screen.blit(sk, (0, 0))
             screen.blit(mouse,(mx,my))
-            pg.draw.polygon(screen, (0, 255, 0), ((100, 100), (100+10, 100+10), (100+20, 100-10),(100+20,100-20),(100+10,100)), 5)
+            pg.draw.polygon(screen, (0, 255, 0), ((30, 30), (50, 40), (50, 60),(30,70),(10,60),(10,40)), 2)
             pg.display.update()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
