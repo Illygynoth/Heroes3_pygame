@@ -19,14 +19,17 @@ class Fight(object):
         pg.mouse.set_visible(False)
         width=dis.current_w/17
         height=dis.current_h/7
-        type="odd"
         count=15
+        sizeY=11
+        current_posY = dis.current_h/7
+        current_posX = dis.current_w / 17+20
         while True:
             mx, my = pg.mouse.get_pos()
             screen.blit(battlefield, (0,0))
             screen.blit(bg, (0, 0))
+            type = "odd"
             height = dis.current_h / 7
-            for j in range(10):
+            for j in range(sizeY):
                 if type=="odd":
                     count = 15
                     type = "even"
@@ -39,7 +42,7 @@ class Fight(object):
                     pg.draw.polygon(screen, bf.color, ((width+bf.x, height+bf.x*2), (width+bf.x*3, height+bf.x), (width+bf.x*5, height+bf.x*2),(width+bf.x*5,height+bf.x*5),(width+bf.x*3, height+bf.x*6),(width+bf.x, height+bf.x*5)), 2)
                     width+=80
                 height+=80
-            screen.blit(sk, (dis.current_w / 20, 0))
+            screen.blit(sk, (current_posX, current_posY))
             screen.blit(mouse, (mx, my))
             pg.display.update()
             for event in pg.event.get():
@@ -48,3 +51,5 @@ class Fight(object):
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         sys.exit(0)
+                if event.type == pg.MOUSEBUTTONUP:
+                    current_posX,current_posY = pg.mouse.get_pos()
