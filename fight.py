@@ -72,5 +72,11 @@ class Fight(object):
                 if event.type == pg.MOUSEBUTTONUP:
                     mX,mY = pg.mouse.get_pos()
                     for i in range(11):
-                        if bf[i][0][2] < mY and bf[i][0][3] > mY:
-                            current_posX,current_posY=bf[i][0][0],bf[i][0][2]
+                        if i%2==0:
+                            for j in range(15):
+                                if bf[i][j][2] < mY and bf[i][j][3] > mY and bf[i][j][0] < mX and bf[i][j][1] > mX:
+                                    current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
+                        else:
+                            for j in range(16):
+                                if bf[i][j][2] < mY and bf[i][j][3] > mY and bf[i][j][0] < mX and bf[i][j][1] > mX:
+                                    current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
