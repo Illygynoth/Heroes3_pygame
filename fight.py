@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import os
+import monsters
 
 class Field(object):
     def __init__(self):
@@ -39,8 +40,9 @@ class Fight(object):
             bf.append(new)
             print(bf[j][0])
             height+=80
-        current_posY = dis.current_h/7
-        current_posX = dis.current_w / 17+20
+        current_posX, current_posY = bf[5][0][0] + 10, bf[5][5][2] - 20
+        value_of_x=0
+        value_of_y=5
         while True:
             mx, my = pg.mouse.get_pos()
             screen.blit(battlefield, (0,0))
@@ -70,13 +72,12 @@ class Fight(object):
                     if event.key == pg.K_ESCAPE:
                         sys.exit(0)
                 if event.type == pg.MOUSEBUTTONUP:
-                    mX,mY = pg.mouse.get_pos()
                     for i in range(11):
                         if i%2==0:
                             for j in range(15):
-                                if bf[i][j][2] < mY and bf[i][j][3] > mY and bf[i][j][0] < mX and bf[i][j][1] > mX:
+                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx:
                                     current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
                         else:
                             for j in range(16):
-                                if bf[i][j][2] < mY and bf[i][j][3] > mY and bf[i][j][0] < mX and bf[i][j][1] > mX:
+                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx:
                                     current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
