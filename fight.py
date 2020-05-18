@@ -75,9 +75,11 @@ class Fight(object):
                     for i in range(11):
                         if i%2==0:
                             for j in range(15):
-                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx:
+                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx and abs(i-value_of_y)+abs(j-value_of_x) < monsters.skeleton_warrior["spd"]+1:
                                     current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
+                                    value_of_y,value_of_x=i,j
                         else:
                             for j in range(16):
-                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx:
+                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx and abs(i-value_of_y)+abs(j-value_of_x) < monsters.skeleton_warrior["spd"]+1:
                                     current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
+                                    value_of_y, value_of_x = i, j
