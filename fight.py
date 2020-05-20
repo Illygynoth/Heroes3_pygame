@@ -65,7 +65,7 @@ class Fight(object):
                     width = dis.current_w / 26
                 for i in range(count):
                     #drawing tiles, in different colour if it's in range of unit's movement
-                    if abs(j-value_of_y)+abs(i-value_of_x) < monsters.skeleton_warrior["spd"]+1:
+                    if abs(j-value_of_y)+abs(i-value_of_x) < monsters["skeleton_warrior"]["spd"]+1:
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
