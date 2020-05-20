@@ -7,5 +7,7 @@ monsters ={
         "hp" : 10,
         "arr" : 0,
         "spd" : 5
+        "mov" : [1,2]
+        "attanim" : [1,3] 
     }
 }
