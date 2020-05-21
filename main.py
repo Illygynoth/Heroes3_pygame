@@ -1,80 +1,101 @@
 import pygame as pg
 import sys
 import os
-from fight import Fight
-pg.init()
-screen=pg.display.set_mode((pg.display.Info().current_w,pg.display.Info().current_h),pg.FULLSCREEN)
-dis=pg.display.Info()
-bg = pg.transform.scale(pg.image.load(os.path.join("images_title2", "background.png")).convert(), (dis.current_w, dis.current_h))
-ng=pg.image.load(os.path.join("images_title2", "new_game.png")).convert_alpha()
-ng_mask=pg.mask.from_surface(ng)
-lg=pg.image.load(os.path.join("images_title2", "load_game.png")).convert_alpha()
-lg_mask=pg.mask.from_surface(lg)
-h=pg.image.load(os.path.join("images_title2", "highscore.png")).convert_alpha()
-h_mask=pg.mask.from_surface(h)
-a=pg.image.load(os.path.join("images_title2", "authors.png")).convert_alpha()
-a_mask=pg.mask.from_surface(a)
-q=pg.image.load(os.path.join("images_title2", "quit.png")).convert_alpha()
-q_mask=pg.mask.from_surface(q)
-nbg=pg.image.load(os.path.join("images_title2", "new_game_bg.png")).convert_alpha()
-mouse=pg.image.load(os.path.join("images_title2", "mouse.png")).convert_alpha()
-mouse_mask=pg.mask.from_surface(mouse)
-def load(name1,name2,name3,name4,name5,name6,name7):
-    global bg,ng,lg,h,a,q,nbg,ng_mask,lg_mask,h_mask,a_mask,q_mask
-    bg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name1)).convert(), (dis.current_w, dis.current_h))
-    ng = pg.transform.scale(pg.image.load(os.path.join("images_title2", name2)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
-    ng_mask = pg.mask.from_surface(ng)
-    lg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name3)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
-    lg_mask = pg.mask.from_surface(lg)
-    h = pg.transform.scale(pg.image.load(os.path.join("images_title2", name4)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
-    h_mask = pg.mask.from_surface(h)
-    a = pg.transform.scale(pg.image.load(os.path.join("images_title2", name5)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
-    a_mask = pg.mask.from_surface(a)
-    q = pg.transform.scale(pg.image.load(os.path.join("images_title2", name6)).convert_alpha(), (int(dis.current_w/6), int(dis.current_h/5)))
-    q_mask = pg.mask.from_surface(q)
-    nbg = pg.transform.scale(pg.image.load(os.path.join("images_title2", name7)).convert_alpha(), (dis.current_w, dis.current_h))
-def disp(b,n,l,h,a,q,g,m,count,type,x,y):
-    screen.blit(b, (0, 0))
-    screen.blit(n, (int(dis.current_w*6/8), int(dis.current_h/50)))
-    screen.blit(l, (int(dis.current_w*6/8), int(dis.current_h*10/50)))
-    screen.blit(h, (int(dis.current_w*6/8), int(dis.current_h*20/50)))
-    screen.blit(a, (int(dis.current_w*6/8), int(dis.current_h*30/50)))
-    screen.blit(q, (int(dis.current_w*6/8), int(dis.current_h*40/50)))
-    screen.blit(m, (x, y))
-    if count ==1 and (type=="new" or type=="load"):
-        screen.blit(g, (0,0))
-    pg.display.update()
-load("background.png","new_game.png","load_game.png","highscore.png","authors.png","quit.png","new_game_bg.png")
-count = 0
-type=""
-while True:
-    pg.mouse.set_visible(False)
-    mx,my=pg.mouse.get_pos()
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            sys.exit(0)
-        if event.type == pg.MOUSEBUTTONDOWN:
-            # Set the x, y postions of the mouse click
-            x, y = event.pos
-            newgame=ng.get_rect()
-            newgame[0]=int(dis.current_w*6/8)
-            newgame[1]=int(dis.current_h/50)
-            if newgame.collidepoint(x, y) and count == 0:
-                load("background.png","single_player.png","multi_player.png","campaign.png","training.png","back.png","new_game_bg.png")
-                type="new"
-                count=1
-            elif newgame.collidepoint(x, y) and count == 1:
-                if type=="new":
-                    Fight()
-            newgame[1] = int(dis.current_h * 10 / 50)
-            if newgame.collidepoint(x,y) and count == 0:
-                load("background.png", "single_player.png", "multi_player.png", "campaign.png", "training.png", "back.png", "load_game_bg.png")
-                type="load"
-                count=1
-            newgame[1]=int(dis.current_h*40/50)
-            if newgame.collidepoint(x,y) and count == 1:
-                load("background.png", "new_game.png", "load_game.png", "highscore.png", "authors.png", "quit.png","new_game_bg.png")
-                count=0
-            elif newgame.collidepoint(x, y) and count == 0:
-                sys.exit(0)
-    disp(bg, ng, lg, h, a, q, nbg, mouse, count,type,mx,my)
+import time
+from monsters import monsters
+from heroes import heroes
+#not important for now, could be done with variables
+class Field(object):
+    def __init__(self):
+        self.x=20
+        self.color=(0,255,0)
+
+class Fight(object):
+    def __init__(self,screen):
+        pg.init()
+        dis = pg.display.Info()
+        #initializing size of battlefield to fullscreen and convering alpha channel
+        battlefield = pg.transform.scale(pg.image.load(os.path.join("dessert", "dessert_bf.png")).convert_alpha(),(dis.current_w, dis.current_h))
+        bg = pg.transform.scale(pg.image.load(os.path.join("dessert", "dessert_bg.png")).convert_alpha(),(dis.current_w, dis.current_h))
+        sk = pg.image.load(os.path.join("skeleton_warrior", "skeleton_warrior1.png")).convert_alpha()
+        sk_mask = pg.mask.from_surface(sk)
+        b = Field()
+        mouse = pg.transform.scale(pg.image.load(os.path.join("images_title2", "mouse.png")).convert_alpha(),(int(dis.current_w / 120), int(dis.current_h / 40)))
+        mouse_mask = pg.mask.from_surface(mouse)
+        pg.mouse.set_visible(False)
+        #Initializing width and height on the screen for battlefield (actual hexes)
+        width=dis.current_w/17
+        height=dis.current_h/7
+        #How much tiles will be in battlefield in width and height
+        count=15
+        sizeY=11
+        type="even"
+        bf=[]
+        h=(heroes["Sandro"],heroes["Sandro"])
+        #initializing hitbox for every tile
+        for j in range(sizeY):
+            if type == "odd":
+                count = 15
+                type = "even"
+                width = dis.current_w / 17
+            elif type == "even":
+                count = 16
+                type = "odd"
+                width = dis.current_w / 26
+            new=[]
+            for i in range(count):
+                new.append([width+b.x,width+b.x*5,height+b.x*2,height+b.x*5])
+                width+=80
+            bf.append(new)
+            print(bf[j][0])
+            height+=80
+        #initializing current pos for unit, and numbers of tiles it's standing on
+        current_posX, current_posY = bf[5][0][0] + 10, bf[5][5][2] - 20
+        value_of_x=0
+        value_of_y=5
+        while True:
+            mx, my = pg.mouse.get_pos()
+            screen.blit(battlefield, (0,0))
+            screen.blit(bg, (0, 0))
+            type = "even"
+            height = dis.current_h / 7
+            for j in range(sizeY):
+                if type=="odd":
+                    count = 15
+                    type = "even"
+                    width = dis.current_w / 17
+                elif type=="even":
+                    count = 16
+                    type="odd"
+                    width = dis.current_w / 26
+                for i in range(count):
+                    #drawing tiles, in different colour if it's in range of unit's movement
+                    if abs(j-value_of_y)+abs(i-value_of_x) < monsters["skeleton_warrior"]["spd"]+1:
+                        pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
+                    else:
+                        pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
+                    width+=80
+                height+=80
+            screen.blit(sk, (current_posX, current_posY))
+            screen.blit(mouse, (mx, my))
+            pg.display.update()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    sys.exit(0)
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        sys.exit(0)
+                if event.type == pg.MOUSEBUTTONUP:
+                    for i in range(11):
+                        #checking if which tile has been clicked (if has) and determining if it was in unit's range
+                        #PROBLEM: to go left/right unit has to move up/down taking movement point which doesn't make sense at that grid
+                        if i%2==0:
+                            for j in range(16):
+                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx and abs(i-value_of_y)+abs(j-value_of_x) <= monsters["skeleton_warrior"]["spd"]+1:
+                                    current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
+                                    value_of_y,value_of_x=i,j
+                        else:
+                            for j in range(15):
+                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx and abs(i-value_of_y)+abs(j-value_of_x) < monsters["skeleton_warrior"]["spd"]+1:
+                                    current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
+                                    value_of_y, value_of_x = i, j
