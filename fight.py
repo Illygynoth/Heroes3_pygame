@@ -51,13 +51,13 @@ class Fight(object):
                 new.append([width+b.x,width+b.x*5,height+b.x*2,height+b.x*5])
                 width+=80
             bf.append(new)
-            print(bf[j][0])
             height+=80
         #initializing current pos for unit, and numbers of tiles it's standing on
         current_posX, current_posY = bf[5][0][0] + 10, bf[5][5][2] - 20
         value_of_x=0
         value_of_y=5
         while True:
+            print(current_posY)
             mx, my = pg.mouse.get_pos()
             screen.blit(battlefield, (0,0))
             screen.blit(bg, (0, 0))
@@ -75,7 +75,7 @@ class Fight(object):
                     width = dis.current_w / 26
                 for i in range(count):
                     #drawing tiles, in different colour if it's in range of unit's movement
-                    if abs(j - value_of_y)>4:
+                    if abs(j - value_of_y)>4 and abs(j - value_of_y) <= monsters["skeleton_warrior"]["spd"]:
                         c=3
                     if abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
                         c = 2
