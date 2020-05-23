@@ -1,7 +1,9 @@
 import pygame as pg
 import sys
 import os
-import monsters
+import time
+from monsters import monsters
+from heroes import heroes
 #not important for now, could be done with variables
 class Field(object):
     def __init__(self):
@@ -16,8 +18,10 @@ class Fight(object):
         battlefield = pg.transform.scale(pg.image.load(os.path.join("dessert", "dessert_bf.png")).convert_alpha(),(dis.current_w, dis.current_h))
         bg = pg.transform.scale(pg.image.load(os.path.join("dessert", "dessert_bg.png")).convert_alpha(),(dis.current_w, dis.current_h))
         sk = pg.image.load(os.path.join("skeleton_warrior", "skeleton_warrior.png")).convert_alpha()
+        sk_mask = pg.mask.from_surface(sk)
         b = Field()
         mouse = pg.transform.scale(pg.image.load(os.path.join("images_title2", "mouse.png")).convert_alpha(),(int(dis.current_w / 120), int(dis.current_h / 40)))
+        mouse_mask = pg.mask.from_surface(mouse)
         pg.mouse.set_visible(False)
         #Initializing width and height on the screen for battlefield (actual hexes)
         width=dis.current_w/17
@@ -27,6 +31,11 @@ class Fight(object):
         sizeY=11
         type="even"
         bf=[]
+        h=(heroes["Sandro"])
+        current=0
+        for i in h["slot"]:
+            current+=1
+        print(current)
         #initializing hitbox for every tile
         for j in range(sizeY):
             if type == "odd":
@@ -55,6 +64,7 @@ class Fight(object):
             type = "even"
             height = dis.current_h / 7
             for j in range(sizeY):
+                c=0
                 if type=="odd":
                     count = 15
                     type = "even"
@@ -65,7 +75,13 @@ class Fight(object):
                     width = dis.current_w / 26
                 for i in range(count):
                     #drawing tiles, in different colour if it's in range of unit's movement
-                    if abs(j-value_of_y)+abs(i-value_of_x) < monsters["skeleton_warrior"]["spd"]+1:
+                    if abs(j - value_of_y)>4:
+                        c=3
+                    if abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
+                        c = 2
+                    if abs(j - value_of_y) <= 2 and abs(j - value_of_y) > 0:
+                        c = 1
+                    if abs(j-value_of_y)+abs(i-value_of_x)-c < monsters["skeleton_warrior"]["spd"]+1:
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
@@ -83,9 +99,10 @@ class Fight(object):
                 if event.type == pg.MOUSEBUTTONUP:
                     for i in range(11):
                         #checking if which tile has been clicked (if has) and determining if it was in unit's range
+                        #PROBLEM: to go left/right unit has to move up/down taking movement point which doesn't make sense at that grid
                         if i%2==0:
                             for j in range(16):
-                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx and abs(i-value_of_y)+abs(j-value_of_x) < monsters["skeleton_warrior"]["spd"]+1:
+                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx and  abs(i-value_of_y) + abs(j-value_of_x) < monsters["skeleton_warrior"]["spd"]+1:
                                     current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
                                     value_of_y,value_of_x=i,j
                         else:
