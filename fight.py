@@ -64,7 +64,6 @@ class Fight(object):
             type = "even"
             height = dis.current_h / 7
             for j in range(sizeY):
-                c=0
                 if type=="odd":
                     count = 15
                     type = "even"
@@ -74,13 +73,23 @@ class Fight(object):
                     type="odd"
                     width = dis.current_w / 26
                 for i in range(count):
+                    c = 0
                     #drawing tiles, in different colour if it's in range of unit's movement
                     if abs(j - value_of_y)>4 and abs(j - value_of_y) <= monsters["skeleton_warrior"]["spd"]:
-                        c=3
-                    if abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
-                        c = 2
-                    if abs(j - value_of_y) <= 2 and abs(j - value_of_y) > 0:
-                        c = 1
+                        if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x:
+                            c = 2
+                        else:
+                            c = 3
+                    elif abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
+                        if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x:
+                            c = 1
+                        else:
+                            c = 2
+                    elif abs(j - value_of_y) <= 2 and abs(j - value_of_y) > 0:
+                        if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x:
+                            c = 0
+                        else:
+                            c = 1
                     if abs(j-value_of_y)+abs(i-value_of_x)-c < monsters["skeleton_warrior"]["spd"]+1:
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
@@ -97,16 +106,49 @@ class Fight(object):
                     if event.key == pg.K_ESCAPE:
                         sys.exit(0)
                 if event.type == pg.MOUSEBUTTONUP:
-                    for i in range(11):
+                    for j in range(sizeY):
                         #checking if which tile has been clicked (if has) and determining if it was in unit's range
                         #PROBLEM: to go left/right unit has to move up/down taking movement point which doesn't make sense at that grid
-                        if i%2==0:
-                            for j in range(16):
-                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx and  abs(i-value_of_y) + abs(j-value_of_x) < monsters["skeleton_warrior"]["spd"]+1:
-                                    current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
-                                    value_of_y,value_of_x=i,j
+                        #PROBLEM: redundancy
+                        #PROBLEM: unit can go further
+                        c=0
+                        if j%2==0:
+                            for i in range(16):
+                                if abs(j - value_of_y) > 4 and abs(j - value_of_y) <= monsters["skeleton_warrior"]["spd"]:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                        c = 2
+                                    else:
+                                        c = 3
+                                elif abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                        c = 1
+                                    else:
+                                        c = 2
+                                elif abs(j - value_of_y) <= 2 and abs(j - value_of_y) > 0:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                        c = 0
+                                    else:
+                                        c = 1
+                                if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters["skeleton_warrior"]["spd"]+1:
+                                    current_posX,current_posY=bf[j][i][0]+10,bf[j][i][2]-20
+                                    value_of_y,value_of_x=j,i
                         else:
-                            for j in range(15):
-                                if bf[i][j][2] < my and bf[i][j][3] > my and bf[i][j][0] < mx and bf[i][j][1] > mx and abs(i-value_of_y)+abs(j-value_of_x) < monsters["skeleton_warrior"]["spd"]+1:
-                                    current_posX,current_posY=bf[i][j][0]+10,bf[i][j][2]-20
-                                    value_of_y, value_of_x = i, j
+                            for i in range(15):
+                                if abs(j - value_of_y) > 4 and abs(j - value_of_y) <= monsters["skeleton_warrior"]["spd"]:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                        c = 2
+                                    else:
+                                        c = 3
+                                elif abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                        c = 1
+                                    else:
+                                        c = 2
+                                elif abs(j - value_of_y) <= 2 and abs(j - value_of_y) > 0:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                        c = 0
+                                    else:
+                                        c = 1
+                                if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and abs(abs(j-value_of_y)+abs(i-value_of_x)-c) < monsters["skeleton_warrior"]["spd"]+1:
+                                    current_posX,current_posY=bf[j][i][0]+10,bf[j][i][2]-20
+                                    value_of_y, value_of_x = j, i
