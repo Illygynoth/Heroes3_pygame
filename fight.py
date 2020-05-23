@@ -1,7 +1,6 @@
 import pygame as pg
 import sys
 import os
-import time
 from monsters import monsters
 from heroes import heroes
 #not important for now, could be done with variables
@@ -115,17 +114,17 @@ class Fight(object):
                         if j%2==0:
                             for i in range(16):
                                 if abs(j - value_of_y) > 4 and abs(j - value_of_y) <= monsters["skeleton_warrior"]["spd"]:
-                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x:
                                         c = 2
                                     else:
                                         c = 3
                                 elif abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
-                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x:
                                         c = 1
                                     else:
                                         c = 2
                                 elif abs(j - value_of_y) <= 2 and abs(j - value_of_y) > 0:
-                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x :
                                         c = 0
                                     else:
                                         c = 1
@@ -135,17 +134,17 @@ class Fight(object):
                         else:
                             for i in range(15):
                                 if abs(j - value_of_y) > 4 and abs(j - value_of_y) <= monsters["skeleton_warrior"]["spd"]:
-                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x:
                                         c = 2
                                     else:
                                         c = 3
                                 elif abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
-                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x:
                                         c = 1
                                     else:
                                         c = 2
                                 elif abs(j - value_of_y) <= 2 and abs(j - value_of_y) > 0:
-                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x:
+                                    if value_of_y % 2 == 0 and j % 2 == 1 and i>value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i<value_of_x:
                                         c = 0
                                     else:
                                         c = 1
