@@ -10,6 +10,7 @@ class Field(object):
         self.color=(0,255,0)
 def move(j,value_of_y,i,value_of_x):
     c=0
+    #PROBLEM: do it for every speed
     if abs(j - value_of_y) > 4 and abs(j - value_of_y) <= monsters["skeleton_warrior"]["spd"]:
         if value_of_y % 2 == 0 and j % 2 == 1 and i > value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i < value_of_x:
             c = 2
