@@ -9,23 +9,23 @@ class Field(object):
         self.x=20
         self.color=(0,255,0)
 def move(j,value_of_y,i,value_of_x):
+    #c is value returning, help is number of grids that must be deleted from movement,speed is for checking if number of row is even and speed2 is only to eliminate problem with odd speed of unit
     c=0
-    #PROBLEM: do it for every speed
-    if abs(j - value_of_y) > 4 and abs(j - value_of_y) <= monsters["skeleton_warrior"]["spd"]:
-        if value_of_y % 2 == 0 and j % 2 == 1 and i > value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i < value_of_x:
-            c = 2
+    help=0
+    speed=0
+    speed2=speed+2
+    while speed <= monsters["skeleton_warrior"]["spd"]:
+        if abs(j - value_of_y) <= speed2 and abs(j - value_of_y) > speed:
+            if value_of_y % 2 == 0 and j % 2 == 1 and i > value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i < value_of_x:
+                c = help
+            else:
+                c = help+1
+        help=help+1
+        speed=speed+2
+        if monsters["skeleton_warrior"]["spd"]-speed==1:
+            speed2=speed+1
         else:
-            c = 3
-    elif abs(j - value_of_y) <= 4 and abs(j - value_of_y) > 2:
-        if value_of_y % 2 == 0 and j % 2 == 1 and i > value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i < value_of_x:
-            c = 1
-        else:
-            c = 2
-    elif abs(j - value_of_y) <= 2 and abs(j - value_of_y) > 0:
-        if value_of_y % 2 == 0 and j % 2 == 1 and i > value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i < value_of_x:
-            c = 0
-        else:
-            c = 1
+            speed2=speed+2
     return c
 class Fight(object):
     def __init__(self,screen):
