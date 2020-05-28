@@ -8,6 +8,29 @@ class Field(object):
     def __init__(self):
         self.x=20
         self.color=(0,255,0)
+def quicksort(tab,l,p):
+    v = tab[int((l+p)/2)]
+    i=l
+    j=p
+    while True:
+        while tab[i]>v:
+            i+=1
+        while tab[j]<v:
+            j-=1
+        if i<=j:
+            x=tab[i]
+            tab[i]=tab[j]
+            tab[j]=x
+            i+=1
+            j-=1
+        if i>j:
+            break
+    if j > l:
+        quicksort(tab,l,j)
+    if i < p:
+        quicksort(tab,i,p)
+    else:
+        return tab
 def move(j,value_of_y,i,value_of_x,name):
     #c is value returning, help is number of grids that must be deleted from movement,speed is for checking if number of row is even and speed2 is only to eliminate problem with odd speed of unit
     c=0
@@ -49,11 +72,15 @@ class Fight(object):
         type="even"
         bf=[]
         h=heroes["Sandro"]
+        speed=[]
         iAMamonster = []
         monsters_pic = []
         for i in h["slot"]:
+            #loading names of monsters to not write all of this all the time
             iAMamonster.append(h["slot"][i]["name"])
         for i in range(len(iAMamonster)):
+            #loading pictures of monsters
+            speed.append(monsters[iAMamonster[i]]["spd"])
             monsters_pic.append(pg.image.load(os.path.join(iAMamonster[i],iAMamonster[i]+".png")).convert_alpha())
         #initializing hitbox for every tile
         for j in range(sizeY):
@@ -75,6 +102,7 @@ class Fight(object):
         current_posX, current_posY = bf[5][0][0] - 5, bf[5][5][2] - 50
         value_of_x=0
         value_of_y=5
+        speed=quicksort(speed,0,len(iAMamonster)-1)
         while True:
             mx, my = pg.mouse.get_pos()
             screen.blit(battlefield, (0,0))
