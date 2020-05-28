@@ -8,13 +8,13 @@ class Field(object):
     def __init__(self):
         self.x=20
         self.color=(0,255,0)
-def move(j,value_of_y,i,value_of_x):
+def move(j,value_of_y,i,value_of_x,name):
     #c is value returning, help is number of grids that must be deleted from movement,speed is for checking if number of row is even and speed2 is only to eliminate problem with odd speed of unit
     c=0
     help=0
     speed=0
     speed2=speed+2
-    while speed <= monsters["skeleton_warrior"]["spd"]:
+    while speed <= monsters[name]["spd"]:
         if abs(j - value_of_y) <= speed2 and abs(j - value_of_y) > speed:
             if value_of_y % 2 == 0 and j % 2 == 1 and i > value_of_x or value_of_y % 2 == 1 and j % 2 == 0 and i < value_of_x:
                 c = help
@@ -22,7 +22,7 @@ def move(j,value_of_y,i,value_of_x):
                 c = help+1
         help=help+1
         speed=speed+2
-        if monsters["skeleton_warrior"]["spd"]-speed==1:
+        if monsters[name]["spd"]-speed==1:
             speed2=speed+1
         else:
             speed2=speed+2
@@ -48,11 +48,13 @@ class Fight(object):
         sizeY=11
         type="even"
         bf=[]
-        h=(heroes["Sandro"])
-        current=0
+        h=heroes["Sandro"]
+        iAMamonster = []
+        monsters_pic = []
         for i in h["slot"]:
-            current+=1
-        print(current)
+            iAMamonster.append(h["slot"][i]["name"])
+        for i in range(len(iAMamonster)):
+            monsters_pic.append(pg.image.load(os.path.join(iAMamonster[i],iAMamonster[i]+".png")).convert_alpha())
         #initializing hitbox for every tile
         for j in range(sizeY):
             if type == "odd":
@@ -70,11 +72,10 @@ class Fight(object):
             bf.append(new)
             height+=80
         #initializing current pos for unit, and numbers of tiles it's standing on
-        current_posX, current_posY = bf[5][0][0] + 10, bf[5][5][2] - 20
+        current_posX, current_posY = bf[5][0][0] - 5, bf[5][5][2] - 50
         value_of_x=0
         value_of_y=5
         while True:
-            print(current_posY)
             mx, my = pg.mouse.get_pos()
             screen.blit(battlefield, (0,0))
             screen.blit(bg, (0, 0))
@@ -92,14 +93,14 @@ class Fight(object):
                 for i in range(count):
                     c = 0
                     #drawing tiles, in different colour if it's in range of unit's movement
-                    c=move(j,value_of_y,i,value_of_x)
-                    if abs(j-value_of_y)+abs(i-value_of_x)-c < monsters["skeleton_warrior"]["spd"]+1:
+                    c=move(j,value_of_y,i,value_of_x,iAMamonster[1])
+                    if abs(j-value_of_y)+abs(i-value_of_x)-c < monsters[iAMamonster[1]]["spd"]+1:
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
                     width+=80
                 height+=80
-            screen.blit(sk, (current_posX, current_posY))
+            screen.blit(monsters_pic[1], (current_posX, current_posY))
             screen.blit(mouse, (mx, my))
             pg.display.update()
             for event in pg.event.get():
@@ -117,13 +118,13 @@ class Fight(object):
                         c=0
                         if j%2==0:
                             for i in range(16):
-                                c=move(j,value_of_y,i,value_of_x)
-                                if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters["skeleton_warrior"]["spd"]+1:
-                                    current_posX,current_posY=bf[j][i][0]+10,bf[j][i][2]-20
+                                c=move(j,value_of_y,i,value_of_x,iAMamonster[1])
+                                if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters[iAMamonster[1]]["spd"]+1:
+                                    current_posX,current_posY=bf[j][i][0]-5,bf[j][i][2]-50
                                     value_of_y,value_of_x=j,i
                         else:
                             for i in range(15):
-                                c=move(j,value_of_y,i,value_of_x)
-                                if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and abs(abs(j-value_of_y)+abs(i-value_of_x)-c) < monsters["skeleton_warrior"]["spd"]+1:
-                                    current_posX,current_posY=bf[j][i][0]+10,bf[j][i][2]-20
+                                c=move(j,value_of_y,i,value_of_x,iAMamonster[1])
+                                if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and abs(abs(j-value_of_y)+abs(i-value_of_x)-c) < monsters[iAMamonster[1]]["spd"]+1:
+                                    current_posX,current_posY=bf[j][i][0]-5,bf[j][i][2]-50
                                     value_of_y, value_of_x = j, i
