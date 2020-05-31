@@ -6,7 +6,7 @@ from heroes import heroes
 #not important for now, could be done with variables
 class Field(object):
     def __init__(self):
-        self.x=15
+        self.x=20
         self.color=(0,255,0)
 def quicksort(tab,l,p):
     v = tab[int((l+p)/2)]
@@ -93,9 +93,9 @@ class Fight(object):
             new=[]
             for i in range(count):
                 new.append([width+b.x,width+b.x*5,height+b.x*2,height+b.x*5])
-                width+=80
+                width+=b.x*4
             bf.append(new)
-            height+=80
+            height+=b.x*4
         #initializing current pos for unit, and numbers of tiles it's standing on
         current_posX, current_posY = bf[5][0][0] - 5, bf[5][5][2] - 50
         value_of_x=0
@@ -113,7 +113,7 @@ class Fight(object):
                     width = dis.current_w / 17
                 elif type=="even":
                     type="odd"
-                    width = dis.current_w / 26
+                    width = dis.current_w / 25
                 for i in range(count):
                     c = 0
                     #drawing tiles, in different colour if it's in range of unit's movement
@@ -122,8 +122,8 @@ class Fight(object):
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
-                    width+=80
-                height+=80
+                    width+=b.x*4
+                height+=b.x*4
             screen.blit(monsters_pic[1], (current_posX, current_posY))
             screen.blit(mouse, (mx, my))
             pg.display.update()
