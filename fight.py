@@ -115,7 +115,7 @@ class Fight(object):
                     type = "even"
                     width = dis.current_w / 17
                 elif type=="even":
-                    count = 16
+                    count = 15
                     type="odd"
                     width = dis.current_w / 26
                 for i in range(count):
@@ -144,15 +144,8 @@ class Fight(object):
                         #PROBLEM SOLVED: redundancy
                         #PROBLEM SOLVED: unit can go further
                         c=0
-                        if j%2==0:
-                            for i in range(16):
-                                c=move(j,value_of_y,i,value_of_x,iAMamonster[1])
-                                if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters[iAMamonster[1]]["spd"]+1:
-                                    current_posX,current_posY=bf[j][i][0]-5,bf[j][i][2]-50
-                                    value_of_y,value_of_x=j,i
-                        else:
-                            for i in range(15):
-                                c=move(j,value_of_y,i,value_of_x,iAMamonster[1])
-                                if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and abs(abs(j-value_of_y)+abs(i-value_of_x)-c) < monsters[iAMamonster[1]]["spd"]+1:
-                                    current_posX,current_posY=bf[j][i][0]-5,bf[j][i][2]-50
-                                    value_of_y, value_of_x = j, i
+                        for i in range(15):
+                            c=move(j,value_of_y,i,value_of_x,iAMamonster[1])
+                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters[iAMamonster[1]]["spd"]+1:
+                                current_posX,current_posY=bf[j][i][0]-5,bf[j][i][2]-50
+                                value_of_y,value_of_x=j,i
