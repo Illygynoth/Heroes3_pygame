@@ -6,7 +6,7 @@ from heroes import heroes
 #not important for now, could be done with variables
 class Field(object):
     def __init__(self):
-        self.x=20
+        self.x=15
         self.color=(0,255,0)
 def quicksort(tab,l,p):
     v = tab[int((l+p)/2)]
@@ -85,11 +85,9 @@ class Fight(object):
         #initializing hitbox for every tile
         for j in range(sizeY):
             if type == "odd":
-                count = 15
                 type = "even"
                 width = dis.current_w / 17
             elif type == "even":
-                count = 16
                 type = "odd"
                 width = dis.current_w / 26
             new=[]
@@ -111,11 +109,9 @@ class Fight(object):
             height = dis.current_h / 7
             for j in range(sizeY):
                 if type=="odd":
-                    count = 15
                     type = "even"
                     width = dis.current_w / 17
                 elif type=="even":
-                    count = 15
                     type="odd"
                     width = dis.current_w / 26
                 for i in range(count):
