@@ -1,3 +1,4 @@
+#Note now there are no turns for now, so movement range in the program can be different than the value in the monsters base
 import pygame as pg
 import sys
 import os
@@ -9,13 +10,13 @@ class Field(object):
         self.x=20
         self.color=(0,255,0)
 def quicksort(tab,l,p):
-    v = tab[int((l+p)/2)]
+    v = tab[int((l+p)/2)]["spd"]
     i=l
     j=p
     while True:
-        while tab[i]>v:
+        while tab[i]["spd"]>v:
             i+=1
-        while tab[j]<v:
+        while tab[j]["spd"]<v:
             j-=1
         if i<=j:
             x=tab[i]
@@ -72,16 +73,14 @@ class Fight(object):
         type="even"
         bf=[]
         h=heroes["Sandro"]
-        speed=[]
         iAMamonster = []
         monsters_pic = []
         for i in h["slot"]:
             #loading names of monsters to not write all of this all the time
-            iAMamonster.append(h["slot"][i]["name"])
+            iAMamonster.append(h["slot"][i])
         for i in range(len(iAMamonster)):
             #loading pictures of monsters
-            speed.append(monsters[iAMamonster[i]]["spd"])
-            monsters_pic.append(pg.image.load(os.path.join(iAMamonster[i],iAMamonster[i]+".png")).convert_alpha())
+            monsters_pic.append(pg.image.load(os.path.join(iAMamonster[i]["name"],iAMamonster[i]["name"]+".png")).convert_alpha())
         #initializing hitbox for every tile
         for j in range(sizeY):
             if type == "odd":
@@ -96,11 +95,11 @@ class Fight(object):
                 width+=b.x*4
             bf.append(new)
             height+=b.x*4
-        #initializing current pos for unit, and numbers of tiles it's standing on
+        #initializing current pos for unit, and coordinates of tiles it's standing on
         current_posX, current_posY = bf[5][0][0] - 5, bf[5][5][2] - 50
         value_of_x=0
         value_of_y=5
-        speed=quicksort(speed,0,len(iAMamonster)-1)
+        iAMamonster=quicksort(iAMamonster,0,len(iAMamonster)-1)
         while True:
             mx, my = pg.mouse.get_pos()
             screen.blit(battlefield, (0,0))
@@ -117,8 +116,8 @@ class Fight(object):
                 for i in range(count):
                     c = 0
                     #drawing tiles, in different colour if it's in range of unit's movement
-                    c=move(j,value_of_y,i,value_of_x,iAMamonster[1])
-                    if abs(j-value_of_y)+abs(i-value_of_x)-c < monsters[iAMamonster[1]]["spd"]+1:
+                    c=move(j,value_of_y,i,value_of_x,iAMamonster[1]["name"])
+                    if abs(j-value_of_y)+abs(i-value_of_x)-c < monsters[iAMamonster[1]["name"]]["spd"]+1:
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
@@ -141,7 +140,7 @@ class Fight(object):
                         #PROBLEM SOLVED: unit can go further
                         c=0
                         for i in range(15):
-                            c=move(j,value_of_y,i,value_of_x,iAMamonster[1])
-                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters[iAMamonster[1]]["spd"]+1:
+                            c=move(j,value_of_y,i,value_of_x,iAMamonster[1]["name"])
+                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters[iAMamonster[1]["name"]]["spd"]+1:
                                 current_posX,current_posY=bf[j][i][0]-5,bf[j][i][2]-50
                                 value_of_y,value_of_x=j,i
