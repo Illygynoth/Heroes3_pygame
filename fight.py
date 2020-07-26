@@ -1,4 +1,4 @@
-#Note now there are no turns for now, so movement range in the program can be different than the value in the monsters base
+#Note: there are no turns for now, so movement range in the program can be different than the value in the monsters base
 import pygame as pg
 import sys
 import os
@@ -72,12 +72,15 @@ class Fight(object):
         sizeY=11
         type="even"
         bf=[]
-        h=heroes["Sandro"]
+        h=[]
+        h.append(heroes["Sandro"])
         iAMamonster = []
         monsters_pic = []
-        for i in h["slot"]:
+        monsters_xy=[]
+        value_of_xy=[]
+        for i in h[0]["slot"]:
             #loading names of monsters to not write all of this all the time
-            iAMamonster.append(h["slot"][i])
+            iAMamonster.append(h[0]["slot"][i])
         for i in range(len(iAMamonster)):
             #loading pictures of monsters
             monsters_pic.append(pg.image.load(os.path.join(iAMamonster[i]["name"],iAMamonster[i]["name"]+".png")).convert_alpha())
@@ -96,6 +99,10 @@ class Fight(object):
             bf.append(new)
             height+=b.x*4
         #initializing current pos for unit, and coordinates of tiles it's standing on
+        for i in range(len(iAMamonster)):
+            monsters_xy.append((bf[5][0][0] - 5, bf[5][i*2][2] - 50,h[0]["slot"][str(i+1)]["name"]))
+            value_of_xy.append((0,i*2))
+        print(monsters_xy)
         current_posX, current_posY = bf[5][0][0] - 5, bf[5][5][2] - 50
         value_of_x=0
         value_of_y=5
@@ -123,7 +130,7 @@ class Fight(object):
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
                     width+=b.x*4
                 height+=b.x*4
-            screen.blit(monsters_pic[1], (current_posX, current_posY))
+            screen.blit(monsters_pic[1], (monsters_xy[0][0], monsters_xy[0][1]))
             screen.blit(mouse, (mx, my))
             pg.display.update()
             for event in pg.event.get():
@@ -142,5 +149,6 @@ class Fight(object):
                         for i in range(15):
                             c=move(j,value_of_y,i,value_of_x,iAMamonster[1]["name"])
                             if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters[iAMamonster[1]["name"]]["spd"]+1:
-                                current_posX,current_posY=bf[j][i][0]-5,bf[j][i][2]-50
-                                value_of_y,value_of_x=j,i
+                                #PROBLEM: tuple cannot be assigned
+                                monsters_xy[0][0],monsters_xy[0][1]=bf[j][i][0]-5,bf[j][i][2]-50
+                                value_of_xy[0][0],value_of_xy[0][1]=j,i
