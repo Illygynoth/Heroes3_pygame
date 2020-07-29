@@ -100,12 +100,8 @@ class Fight(object):
             height+=b.x*4
         #initializing current pos for unit, and coordinates of tiles it's standing on
         for i in range(len(iAMamonster)):
-            monsters_xy.append((bf[5][0][0] - 5, bf[5][i*2][2] - 50,h[0]["slot"][str(i+1)]["name"]))
-            value_of_xy.append((0,i*2))
-        print(monsters_xy)
-        current_posX, current_posY = bf[5][0][0] - 5, bf[5][5][2] - 50
-        value_of_x=0
-        value_of_y=5
+            monsters_xy.append([bf[i*2][0][0] - 5, bf[i*2][i*2][2] - 50,h[0]["slot"][str(i+1)]["name"]])
+            value_of_xy.append([0,i*2])
         iAMamonster=quicksort(iAMamonster,0,len(iAMamonster)-1)
         while True:
             mx, my = pg.mouse.get_pos()
@@ -123,8 +119,8 @@ class Fight(object):
                 for i in range(count):
                     c = 0
                     #drawing tiles, in different colour if it's in range of unit's movement
-                    c=move(j,value_of_y,i,value_of_x,iAMamonster[1]["name"])
-                    if abs(j-value_of_y)+abs(i-value_of_x)-c < monsters[iAMamonster[1]["name"]]["spd"]+1:
+                    c=move(j,value_of_xy[0][1],i,value_of_xy[0][0],iAMamonster[0]["name"])
+                    if abs(j-value_of_xy[0][1])+abs(i-value_of_xy[0][0])-c < monsters[iAMamonster[0]["name"]]["spd"]+1:
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
@@ -147,8 +143,7 @@ class Fight(object):
                         #PROBLEM SOLVED: unit can go further
                         c=0
                         for i in range(15):
-                            c=move(j,value_of_y,i,value_of_x,iAMamonster[1]["name"])
-                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_y) + abs(i-value_of_x)-c) < monsters[iAMamonster[1]["name"]]["spd"]+1:
-                                #PROBLEM: tuple cannot be assigned
+                            c=move(j,value_of_xy[0][1],i,value_of_xy[0][0],iAMamonster[0]["name"])
+                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_xy[0][1]) + abs(i-value_of_xy[0][0])-c) < monsters[iAMamonster[0]["name"]]["spd"]+1:
                                 monsters_xy[0][0],monsters_xy[0][1]=bf[j][i][0]-5,bf[j][i][2]-50
-                                value_of_xy[0][0],value_of_xy[0][1]=j,i
+                                value_of_xy[0][0],value_of_xy[0][1]=i,j
