@@ -83,7 +83,7 @@ class Fight(object):
             iAMamonster.append(h[0]["slot"][i])
         for i in range(len(iAMamonster)):
             #loading pictures of monsters
-            monsters_pic.append(pg.image.load(os.path.join(iAMamonster[i]["name"],iAMamonster[i]["name"]+".png")).convert_alpha())
+            monsters_pic.append([pg.image.load(os.path.join(iAMamonster[i]["name"],iAMamonster[i]["name"]+".png")).convert_alpha(),iAMamonster[i]["name"]])
         #initializing hitbox for every tile
         for j in range(sizeY):
             if type == "odd":
@@ -100,9 +100,20 @@ class Fight(object):
             height+=b.x*4
         #initializing current pos for unit, and coordinates of tiles it's standing on
         for i in range(len(iAMamonster)):
-            monsters_xy.append([bf[i*2][0][0] - 5, bf[i*2][i*2][2] - 50,h[0]["slot"][str(i+1)]["name"]])
-            value_of_xy.append([0,i*2])
+            monsters_xy.append([bf[i*2][0][0] - 5, bf[i*2][i*2][2] - 50,0,i*2,h[0]["slot"][str(i+1)]["name"]])
+            value_of_xy.append([0,i*2,h[0]["slot"][str(i+1)]["name"]])
         iAMamonster=quicksort(iAMamonster,0,len(iAMamonster)-1)
+        current_monster = 0
+        current_pic = -1
+        current_xy=-1
+        for i in range(len(iAMamonster)):
+            if monsters_pic[i][1] == iAMamonster[0]["name"]:
+                current_pic=i
+                break
+        for i in range(len(iAMamonster)):
+            if monsters_xy[i][4] == iAMamonster[0]["name"]:
+                current_xy=i
+                break
         while True:
             mx, my = pg.mouse.get_pos()
             screen.blit(battlefield, (0,0))
@@ -119,14 +130,23 @@ class Fight(object):
                 for i in range(count):
                     c = 0
                     #drawing tiles, in different colour if it's in range of unit's movement
-                    c=move(j,value_of_xy[0][1],i,value_of_xy[0][0],iAMamonster[0]["name"])
-                    if abs(j-value_of_xy[0][1])+abs(i-value_of_xy[0][0])-c < monsters[iAMamonster[0]["name"]]["spd"]+1:
+                    c=move(j,monsters_xy[0][3],i,monsters_xy[0][2],iAMamonster[0]["name"])
+                    if abs(j-monsters_xy[0][3])+abs(i-monsters_xy[0][2])-c < monsters[iAMamonster[0]["name"]]["spd"]+1:
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
                     width+=b.x*4
                 height+=b.x*4
-            screen.blit(monsters_pic[1], (monsters_xy[0][0], monsters_xy[0][1]))
+            for i in range(len(iAMamonster)):
+                for j in range(len(iAMamonster)):
+                    if monsters_pic[i][1] == iAMamonster[j]["name"]:
+                        pic=j
+                        break
+                for j in range(len(iAMamonster)):
+                    if monsters_pic[i][1] == monsters_xy[j][4]:
+                        xy=j
+                        break
+                screen.blit(monsters_pic[pic][0], (monsters_xy[xy][0], monsters_xy[xy][1]))
             screen.blit(mouse, (mx, my))
             pg.display.update()
             for event in pg.event.get():
@@ -141,9 +161,11 @@ class Fight(object):
                         #PROBLEM SOLVED: to go left/right unit has to move up/down taking movement point which doesn't make sense at that grid
                         #PROBLEM SOLVED: redundancy
                         #PROBLEM SOLVED: unit can go further
+                        #PROBLEM SOLVED: Unit cannot access part of the map
                         c=0
                         for i in range(15):
-                            c=move(j,value_of_xy[0][1],i,value_of_xy[0][0],iAMamonster[0]["name"])
-                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-value_of_xy[0][1]) + abs(i-value_of_xy[0][0])-c) < monsters[iAMamonster[0]["name"]]["spd"]+1:
+                            c=move(j,monsters_xy[0][3],i,monsters_xy[0][2],iAMamonster[0]["name"])
+                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-monsters_xy[0][3]) + abs(i-monsters_xy[0][2])-c) < monsters[iAMamonster[0]["name"]]["spd"]+1:
                                 monsters_xy[0][0],monsters_xy[0][1]=bf[j][i][0]-5,bf[j][i][2]-50
-                                value_of_xy[0][0],value_of_xy[0][1]=i,j
+                                monsters_xy[0][2],monsters_xy[0][3]=i,j
+                                current_monster=(current_monster+1)%len(iAMamonster)
