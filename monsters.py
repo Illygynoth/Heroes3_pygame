@@ -1,11 +1,24 @@
-monsters ={
+monsters={
     "skeleton_warrior" : {
-        "att" : 2,
-        "def" : 3,
-        "min" : 2,
+        "name" : "skeleton_warrior",
+        "att" : 6,
+        "def" : 6,
+        "min" : 1,
         "max" : 3,
-        "hp" : 10,
+        "hp" : 6,
         "arr" : 0,
-        "spd" : 5
+        "spd" : 5,
+        "size" : 1
+    },
+    "storm_bird" : {
+        "name" : "storm_bird",
+        "att" : 13,
+        "def" : 11,
+        "min" : 11,
+        "max" : 15,
+        "hp" : 60,
+        "arr" : 0,
+        "spd" : 11,
+        "size" : 2
     }
 }
