@@ -10,13 +10,13 @@ class Field(object):
         self.x=20
         self.color=(0,255,0)
 def quicksort(tab,l,p):
-    v = tab[int((l+p)/2)]["spd"]
+    v = tab[int((l+p)/2)][0]["spd"]
     i=l
     j=p
     while True:
-        while tab[i]["spd"]>v:
+        while tab[i][0]["spd"]>v:
             i+=1
-        while tab[j]["spd"]<v:
+        while tab[j][0]["spd"]<v:
             j-=1
         if i<=j:
             x=tab[i]
@@ -77,13 +77,12 @@ class Fight(object):
         iAMamonster = []
         monsters_pic = []
         monsters_xy=[]
-        value_of_xy=[]
         for i in h[0]["slot"]:
             #loading names of monsters to not write all of this all the time
             iAMamonster.append(h[0]["slot"][i])
         for i in range(len(iAMamonster)):
             #loading pictures of monsters
-            monsters_pic.append([pg.image.load(os.path.join(iAMamonster[i]["name"],iAMamonster[i]["name"]+".png")).convert_alpha(),iAMamonster[i]["name"]])
+            monsters_pic.append([pg.image.load(os.path.join(iAMamonster[i][0]["name"],iAMamonster[i][0]["name"]+".png")).convert_alpha(),iAMamonster[i][0]["name"]])
         #initializing hitbox for every tile
         for j in range(sizeY):
             if type == "odd":
@@ -100,22 +99,18 @@ class Fight(object):
             height+=b.x*4
         #initializing current pos for unit, and coordinates of tiles it's standing on
         for i in range(len(iAMamonster)):
-            monsters_xy.append([bf[i*2][0][0] - 5, bf[i*2][i*2][2] - 50,0,i*2,h[0]["slot"][str(i+1)]["name"]])
+            monsters_xy.append([bf[i*2][0][0] - 5, bf[i*2][i*2][2] - 50,0,i*2,h[0]["slot"][str(i+1)][0]["name"]])
         iAMamonster=quicksort(iAMamonster,0,len(iAMamonster)-1)
         current_monster = 0
         current_pic = -1
         current_xy=-1
         for i in range(len(iAMamonster)):
-            if monsters_pic[i][1] == iAMamonster[0]["name"]:
+            if monsters_pic[i][1] == iAMamonster[0][0]["name"]:
                 current_pic=i
                 break
         for i in range(len(iAMamonster)):
-            if monsters_xy[i][4] == iAMamonster[0]["name"]:
+            if monsters_xy[i][4] == iAMamonster[0][0]["name"]:
                 current_xy=i
-        print(monsters_xy[current_xy])
-        print(monsters_xy[0])
-        print(monsters_xy[1])
-        print(monsters_pic)
         while True:
             mx, my = pg.mouse.get_pos()
             screen.blit(battlefield, (0,0))
@@ -132,8 +127,8 @@ class Fight(object):
                 for i in range(count):
                     c = 0
                     #drawing tiles, in different colour if it's in range of unit's movement
-                    c=move(j,monsters_xy[current_xy][3],i,monsters_xy[current_xy][2],iAMamonster[current_monster]["name"])
-                    if abs(j-monsters_xy[current_xy][3])+abs(i-monsters_xy[current_xy][2])-c < monsters[iAMamonster[current_monster]["name"]]["spd"]+1:
+                    c=move(j,monsters_xy[current_xy][3],i,monsters_xy[current_xy][2],iAMamonster[current_monster][0]["name"])
+                    if abs(j-monsters_xy[current_xy][3])+abs(i-monsters_xy[current_xy][2])-c < monsters[iAMamonster[current_monster][0]["name"]]["spd"]+1:
                         pg.draw.polygon(screen, (0,0,255), ((width+b.x, height+b.x*2), (width+b.x*3, height+b.x), (width+b.x*5, height+b.x*2),(width+b.x*5,height+b.x*5),(width+b.x*3, height+b.x*6),(width+b.x, height+b.x*5)), 2)
                     else:
                         pg.draw.polygon(screen, b.color, ((width + b.x, height + b.x * 2), (width + b.x * 3, height + b.x),(width + b.x * 5, height + b.x * 2), (width + b.x * 5, height + b.x * 5), (width + b.x * 3, height + b.x * 6), (width + b.x, height + b.x * 5)), 2)
@@ -141,7 +136,7 @@ class Fight(object):
                 height+=b.x*4
             for i in range(len(iAMamonster)):
                 for j in range(len(iAMamonster)):
-                    if monsters_pic[i][1] == iAMamonster[j]["name"]:
+                    if monsters_pic[i][1] == iAMamonster[j][0]["name"]:
                         pic=j
                         break
                 for j in range(len(iAMamonster)):
@@ -166,16 +161,16 @@ class Fight(object):
                         #PROBLEM SOLVED: Unit cannot access part of the map
                         c=0
                         for i in range(15):
-                            c=move(j,monsters_xy[current_xy][3],i,monsters_xy[current_xy][2],iAMamonster[current_monster]["name"])
-                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-monsters_xy[current_xy][3]) + abs(i-monsters_xy[current_xy][2])-c) < monsters[iAMamonster[current_xy]["name"]]["spd"]+1:
+                            c=move(j,monsters_xy[current_xy][3],i,monsters_xy[current_xy][2],iAMamonster[current_monster][0]["name"])
+                            if bf[j][i][2] < my and bf[j][i][3] > my and bf[j][i][0] < mx and bf[j][i][1] > mx and  abs(abs(j-monsters_xy[current_xy][3]) + abs(i-monsters_xy[current_xy][2])-c) < monsters[iAMamonster[current_xy][0]["name"]]["spd"]+1:
                                 monsters_xy[current_xy][0],monsters_xy[current_xy][1]=bf[j][i][0]-5,bf[j][i][2]-50
                                 monsters_xy[current_xy][2],monsters_xy[current_xy][3]=i,j
                                 current_monster=(current_monster+1)%len(iAMamonster)
                                 for i in range(len(iAMamonster)):
-                                    if monsters_pic[i][1] == iAMamonster[current_monster]["name"]:
+                                    if monsters_pic[i][1] == iAMamonster[current_monster][0]["name"]:
                                         current_pic = i
                                         break
                                 for i in range(len(iAMamonster)):
-                                    if monsters_xy[i][4] == iAMamonster[current_monster]["name"]:
+                                    if monsters_xy[i][4] == iAMamonster[current_monster][0]["name"]:
                                         current_xy = i
                                         break
