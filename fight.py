@@ -109,7 +109,7 @@ class Fight(object):
                 current_pic=i
                 break
         for i in range(len(iAMamonster)):
-            if monsters_xy[i][4] == iAMamonster[0][0]["name"]:
+            if iAMamonster[0][0]["name"] == monsters_xy[i][4]:
                 current_xy=i
         while True:
             mx, my = pg.mouse.get_pos()
@@ -136,11 +136,11 @@ class Fight(object):
                 height+=b.x*4
             for i in range(len(iAMamonster)):
                 for j in range(len(iAMamonster)):
-                    if monsters_pic[i][1] == iAMamonster[j][0]["name"]:
+                    if iAMamonster[i][0]["name"] == monsters_pic[j][1]:
                         pic=j
                         break
                 for j in range(len(iAMamonster)):
-                    if monsters_pic[i][1] == monsters_xy[j][4]:
+                    if monsters_xy[j][4] == monsters_pic[pic][1]:
                         xy=j
                         break
                 screen.blit(monsters_pic[pic][0], (monsters_xy[xy][0], monsters_xy[xy][1]))
